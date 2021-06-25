@@ -26,6 +26,7 @@ class SNAKE:
         self.body_bl = pygame.image.load('Graphics/body_left_down.png').convert_alpha()
 
     def draw_snake(self):
+        #updates head and body parts so the blocks have the right sprites
         self.update_head_graphics()
         self.update_tail_graphics()
 
@@ -94,7 +95,6 @@ class FRUIT:
     def draw_fruit(self):
         fruit_rect = pygame.Rect(int(self.pos.x * cell_size),int(self.pos.y * cell_size),cell_size,cell_size)
         screen.blit(apple,fruit_rect)
-        # pygame.draw.rect(screen,(126,166,114),fruit_rect)
 
     def randomize(self):
         self.x = random.randint(0,cell_number - 1)
@@ -120,7 +120,7 @@ class MAIN:
     
     def check_collision(self):
         if self.fruit.pos == self.snake.body[0]:
-        #make a new fruit, add body block, add point
+        #randomizes the fruit again, adds a block and adds a point to the score counter
             self.fruit.randomize()
             self.snake.add_block()
             self.score += 1
@@ -139,6 +139,7 @@ class MAIN:
         #epic fail
 
     def draw_grass(self):
+        #only draws every other block using division
         grass_color = (167,209,61)
         for row in range(cell_number):
             if row % 2 == 0:
@@ -153,6 +154,7 @@ class MAIN:
                         pygame.draw.rect(screen,grass_color,grass_rect)
 
     def game_over(self):
+        #exits game and prints your score in powershell
         print(f"\nYour score was {self.score}!\n") 
         pygame.quit()
         sys.exit()
@@ -177,14 +179,16 @@ SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE,150)
 
 while True:
-    #draw elements and other things
-    #make sure that you can only move in specific directions
+    #draw elements
+    #snake cant go left when moving right and vice versa
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
         if event.type == SCREEN_UPDATE:
             main_game.update()
+
+        #arrow controls
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 if main_game.snake.direction.y != 1:
@@ -196,6 +200,21 @@ while True:
                 if main_game.snake.direction.x != 1:
                     main_game.snake.direction = Vector2(-1,0)
             if event.key == pygame.K_RIGHT:
+                if main_game.snake.direction.x != -1:
+                    main_game.snake.direction = Vector2(1,0)
+
+        #WASD Controls
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_w:
+                if main_game.snake.direction.y != 1:
+                    main_game.snake.direction = Vector2(0,-1)
+            if event.key == pygame.K_s:
+                if main_game.snake.direction.y != -1:
+                    main_game.snake.direction = Vector2(0,1)
+            if event.key == pygame.K_a:
+                if main_game.snake.direction.x != 1:
+                    main_game.snake.direction = Vector2(-1,0)
+            if event.key == pygame.K_d:
                 if main_game.snake.direction.x != -1:
                     main_game.snake.direction = Vector2(1,0)
 
