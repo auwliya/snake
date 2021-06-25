@@ -1,12 +1,16 @@
 import pygame, sys, random
 from pygame.math import Vector2
 
+# Snake created by Auwliya Popal
+
 class SNAKE:
     def __init__(self):
+        # Vectors the snake starts out with (three blocks long, always in the same coördinates)
         self.body = [Vector2(5,10),Vector2(4,10),Vector2(3,10)]
         self.direction = Vector2(1,0)
         self.new_block = False
 
+        # Snake graphics
         self.head_up = pygame.image.load('Graphics/head_up.png').convert_alpha()
         self.head_down = pygame.image.load('Graphics/head_down.png').convert_alpha()
         self.head_right = pygame.image.load('Graphics/head_right.png').convert_alpha()
@@ -26,13 +30,13 @@ class SNAKE:
         self.body_bl = pygame.image.load('Graphics/body_left_down.png').convert_alpha()
 
     def draw_snake(self):
-        #updates head and body parts so the blocks have the right sprites
+        # updates head and body parts so the blocks have the right sprites
         self.update_head_graphics()
         self.update_tail_graphics()
 
         for index,block in enumerate(self.body):
-            #what direction is it going in
-            #make a rectangle for positioning
+            # what direction is it going in
+            # make a rectangle for positioning
             x_pos = int(block.x * cell_size)
             y_pos = int(block.y * cell_size)
             block_rect = pygame.Rect(x_pos,y_pos,cell_size,cell_size)
@@ -42,6 +46,7 @@ class SNAKE:
             elif index == len(self.body) - 1:
                 screen.blit(self.tail,block_rect)
             else:
+                # if the if and elif dont apply, its a corner piece, so only figuring out the oriëntation works
                 previous_block = self.body[index + 1] - block
                 next_block = self.body[index - 1] - block
                 if previous_block.x == next_block.x:
@@ -59,6 +64,8 @@ class SNAKE:
                         screen.blit(self.body_br,block_rect)
 
     def update_head_graphics(self):
+        # update head and tail graphics figure out what sprite to blit onto the block
+        # by subtracting the head from the first body after it you get the direction the head is heading in
         head_relation = self.body[1] - self.body[0]
         if head_relation == Vector2(1,0): self.head = self.head_left
         elif head_relation == Vector2(-1,0): self.head = self.head_right
@@ -66,6 +73,7 @@ class SNAKE:
         elif head_relation == Vector2(0,-1): self.head = self.head_down
 
     def update_tail_graphics(self):
+        # works the same as update_head_graphics
         tail_relation = self.body[-2] - self.body[-1]
         if tail_relation == Vector2(1,0): self.tail = self.tail_left
         elif tail_relation == Vector2(-1,0): self.tail = self.tail_right
@@ -73,36 +81,45 @@ class SNAKE:
         elif tail_relation == Vector2(0,-1): self.tail = self.tail_down
 
     def move_snake(self):
+        # adds a block, sets self.new_block to false again
         if self.new_block == True:
             body_copy = self.body[:]
             body_copy.insert(0,body_copy[0] + self.direction)
             self.body = body_copy[:]
             self.new_block = False
         else:
+            #moves the snake forward in the direction 
             body_copy = self.body[:-1]
             body_copy.insert(0,body_copy[0] + self.direction)
             self.body = body_copy[:]
 
     def add_block(self):
+        #sets new_block to true after collision
         self.new_block = True
 
 class FRUIT:
     def __init__(self):
+        # the fruit starts randomized
         self.x = random.randint(0,cell_number - 1)
         self.y = random.randint(0,cell_number - 1)
         self.pos = Vector2(self.x,self.y)
 
     def draw_fruit(self):
+        # creates a rectangle for the apple, blit teleports the graphic onto the apple
         fruit_rect = pygame.Rect(int(self.pos.x * cell_size),int(self.pos.y * cell_size),cell_size,cell_size)
         screen.blit(apple,fruit_rect)
 
     def randomize(self):
+        # creates a rancom coördinate between 0 and 20 - 1 (so it doesn't go outside the border)
+        # randomizes the fruit again after eating (__init__ only does it at the start)
         self.x = random.randint(0,cell_number - 1)
         self.y = random.randint(0,cell_number - 1)
         self.pos = Vector2(self.x,self.y)
 
 class MAIN:
+    # contains all the other things like updates, drawings and checks so that it keeps getting repeated
     def __init__(self):
+        # contains self.score (otherwise it keeps setting itself to 0)
         self.snake = SNAKE()
         self.fruit = FRUIT()
         self.score = 0
@@ -120,26 +137,28 @@ class MAIN:
     
     def check_collision(self):
         if self.fruit.pos == self.snake.body[0]:
-        #randomizes the fruit again, adds a block and adds a point to the score counter
+        # randomizes the fruit again, adds a block and adds a point to the score counter
             self.fruit.randomize()
             self.snake.add_block()
             self.score += 1
 
         for block in self.snake.body[1:]:
+            # makes sure that the fruit cannot spawn below or on the snake
             if block == self.fruit.pos:
                 self.fruit.randomize()
 
     def check_fail(self):
+        # checks it the snake is between the allowed x and y values of the grid
         if not 0 <= self.snake.body[0].x < cell_number or not 0 <= self.snake.body[0].y < cell_number:
             self.game_over()
         
         for block in self.snake.body[1:]:
             if block == self.snake.body[0]:
                 self.game_over()
-        #epic fail
+        # epic fail
 
     def draw_grass(self):
-        #only draws every other block using division
+        # only draws every other block using division
         grass_color = (167,209,61)
         for row in range(cell_number):
             if row % 2 == 0:
@@ -154,7 +173,7 @@ class MAIN:
                         pygame.draw.rect(screen,grass_color,grass_rect)
 
     def game_over(self):
-        #exits game and prints your score in powershell
+        # exits game and prints your score in powershell
         print(f"\nYour score was {self.score}!\n") 
         pygame.quit()
         sys.exit()
@@ -179,8 +198,8 @@ SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE,150)
 
 while True:
-    #draw elements
-    #snake cant go left when moving right and vice versa
+    # draw elements
+    # snake cant go left when moving right and vice versa
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
@@ -188,7 +207,7 @@ while True:
         if event.type == SCREEN_UPDATE:
             main_game.update()
 
-        #arrow controls
+        # arrow controls
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_UP:
                 if main_game.snake.direction.y != 1:
@@ -203,7 +222,7 @@ while True:
                 if main_game.snake.direction.x != -1:
                     main_game.snake.direction = Vector2(1,0)
 
-        #WASD Controls
+        # WASD Controls
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_w:
                 if main_game.snake.direction.y != 1:
