@@ -1,4 +1,4 @@
-import pygame, sys, random
+import pygame, sys, random, os
 from pygame.math import Vector2
 
 # Snake created by Auwliya123 / Lemon1
@@ -214,6 +214,7 @@ class MAIN:
         elif self.apples_consumed == 0:
             print(f"You didn't eat any apples!\n")
 
+        os.system('cmd /k start start.py')
         pygame.quit()
         sys.exit()
     
