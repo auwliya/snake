@@ -87,6 +87,7 @@ class SNAKE:
             body_copy.insert(0,body_copy[0] + self.direction)
             self.body = body_copy[:]
             self.new_block = False
+        
         else:
             #moves the snake forward in the direction 
             body_copy = self.body[:-1]
@@ -112,12 +113,12 @@ class FRUIT:
         screen.blit(self.fruit_sprite,fruit_rect)
 
     def randomize(self):
-        # creates a rancom coördinate between 0 and 20 - 1 (so it doesn't go outside the border)
+        # creates a random coördinate between 0 and 20 - 1 (so it doesn't go outside the border)
         # randomizes the fruit again after eating (__init__ only does it at the start)
         self.x = random.randint(0,cell_number - 1)
         self.y = random.randint(0,cell_number - 1)
         self.pos = Vector2(self.x,self.y)
-        # if the random number is 1 or 2 its an apple, if its a 0 its a lemon.
+        #if the random number is 1 or 2 its an apple, if its a 0 its a lemon.
         if random.randint(0,2) >= 1:
             self.fruit_sprite = apple
         else:
@@ -130,6 +131,9 @@ class MAIN:
         self.snake = SNAKE()
         self.fruit = FRUIT()
         self.score = 0
+        self.lemons_consumed = 0
+        self.apples_consumed = 0
+        total_consumed_fruits = self.apples_consumed + self.lemons_consumed
     
     def update(self):
         self.snake.move_snake()
@@ -150,10 +154,12 @@ class MAIN:
             if self.fruit.fruit_sprite == apple:
                 self.snake.add_block()
                 self.score += 1
+                self.apples_consumed += 1
             else:
                 self.snake.add_block()
                 self.snake.add_block()
                 self.score += 2
+                self.lemons_consumed += 1
 
         for block in self.snake.body[1:]:
             # makes sure that the fruit cannot spawn below or on the snake
@@ -187,7 +193,21 @@ class MAIN:
 
     def game_over(self):
         # exits game and prints your score in powershell
-        print(f"\nYour score was {self.score}!\n") 
+        print(f"\nYour score was {self.score}!\n")
+        if self.lemons_consumed >= 1:
+            print(f"You consumed {self.lemons_consumed} lemons!")
+        elif self.lemons_consumed == 1:
+            print(f"You consumed {self.lemons_consumed} lemon!")
+        elif self.lemons_consumed == 0:
+            print(f"You didn't eat any lemons!")
+
+        if self.apples_consumed >=1:
+            print(f"you consumed {self.apples_consumed} apples!\n")
+        elif self.apples_consumed == 1:
+            print(f"You consumed {self.apples_consumed} lemon!\n")
+        elif self.apples_consumed == 0:
+            print(f"You didn't eat any apples!\n")
+
         pygame.quit()
         sys.exit()
     
@@ -252,6 +272,11 @@ while True:
             if event.key == pygame.K_d:
                 if main_game.snake.direction.x != -1:
                     main_game.snake.direction = Vector2(1,0)
+
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_ESCAPE:
+                pygame.quit()
+                sys.exit()
 
     screen.fill((175,215,70))
     main_game.draw_elements()
