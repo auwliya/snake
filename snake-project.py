@@ -1,7 +1,7 @@
 import pygame, sys, random
 from pygame.math import Vector2
 
-# Snake created by Auwliya Popal
+# Snake created by Auwliya123 / Lemon1
 
 class SNAKE:
     def __init__(self):
@@ -100,6 +100,7 @@ class SNAKE:
 class FRUIT:
     def __init__(self):
         # the fruit starts randomized
+        self.fruit_sprite = apple
         self.x = random.randint(0,cell_number - 1)
         self.y = random.randint(0,cell_number - 1)
         self.pos = Vector2(self.x,self.y)
@@ -107,7 +108,7 @@ class FRUIT:
     def draw_fruit(self):
         # creates a rectangle for the apple, blit teleports the graphic onto the apple
         fruit_rect = pygame.Rect(int(self.pos.x * cell_size),int(self.pos.y * cell_size),cell_size,cell_size)
-        screen.blit(apple,fruit_rect)
+        screen.blit(self.fruit_sprite,fruit_rect)
 
     def randomize(self):
         # creates a rancom coördinate between 0 and 20 - 1 (so it doesn't go outside the border)
@@ -115,6 +116,10 @@ class FRUIT:
         self.x = random.randint(0,cell_number - 1)
         self.y = random.randint(0,cell_number - 1)
         self.pos = Vector2(self.x,self.y)
+        if random.randint(0,2) >= 1:
+            self.fruit_sprite = apple
+        else:
+            self.fruit_sprite = lemon
 
 class MAIN:
     # contains all the other things like updates, drawings and checks so that it keeps getting repeated
@@ -139,8 +144,13 @@ class MAIN:
         if self.fruit.pos == self.snake.body[0]:
         # randomizes the fruit again, adds a block and adds a point to the score counter
             self.fruit.randomize()
-            self.snake.add_block()
-            self.score += 1
+            if self.fruit.fruit_sprite == apple:
+                self.snake.add_block()
+                self.score += 1
+            else:
+                self.snake.add_block()
+                self.snake.add_block()
+                self.score += 2
 
         for block in self.snake.body[1:]:
             # makes sure that the fruit cannot spawn below or on the snake
@@ -189,8 +199,11 @@ pygame.init()
 cell_size = 40
 cell_number = 20
 screen = pygame.display.set_mode((cell_number * cell_size,cell_number * cell_size))
-clock = pygame.time.Clock()
-apple = pygame.image.load('Graphics/apple.png').convert_alpha()
+clock = pygame.time.Clock() 
+
+apple = pygame.image.load('Graphics/apple.png').convert_alpha() 
+lemon = pygame.image.load('Graphics/lemon.png').convert_alpha() 
+
 main_game = MAIN()
 game_font = pygame.font.Font('Font/ARCADECLASSIC.ttf',25)
 
