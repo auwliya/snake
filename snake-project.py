@@ -107,6 +107,7 @@ class FRUIT:
 
     def draw_fruit(self):
         # creates a rectangle for the apple, blit teleports the graphic onto the apple
+        #The sprite it .blits onto it is set as self.fruit_sprite so it can be both an apple or a lemon
         fruit_rect = pygame.Rect(int(self.pos.x * cell_size),int(self.pos.y * cell_size),cell_size,cell_size)
         screen.blit(self.fruit_sprite,fruit_rect)
 
@@ -116,6 +117,7 @@ class FRUIT:
         self.x = random.randint(0,cell_number - 1)
         self.y = random.randint(0,cell_number - 1)
         self.pos = Vector2(self.x,self.y)
+        # if the random number is 1 or 2 its an apple, if its a 0 its a lemon.
         if random.randint(0,2) >= 1:
             self.fruit_sprite = apple
         else:
@@ -144,6 +146,7 @@ class MAIN:
         if self.fruit.pos == self.snake.body[0]:
         # randomizes the fruit again, adds a block and adds a point to the score counter
             self.fruit.randomize()
+            # different collisions with the fruits
             if self.fruit.fruit_sprite == apple:
                 self.snake.add_block()
                 self.score += 1

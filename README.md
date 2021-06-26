@@ -14,6 +14,9 @@ The code uses Vector2 to simulate a grid, where the snake consists of blocks in 
 The game can be played with both the arrow keys and WASD controls.
 When you crash into yourself or hit a border the game is over. As of right now the game closes itself once you're game over, but I might add a game-over screen or start menu.
 
+There are apples and lemons, when you eat an apple you grow 1 block and get 1 point. When you eat a lemon you grow 2 blocks and gain 2 points.
+Lemons have a 33% of showing up, apples 66%
+
 There are comments in the code explaining other uses and info.
 
 Note: It's playable, I might add updates in the future.
