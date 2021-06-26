@@ -2,6 +2,7 @@ import pygame, sys, random
 from pygame.math import Vector2
 
 # Snake created by Auwliya123 / Lemon1
+# All pixel art is created by me
 
 class SNAKE:
     def __init__(self):
@@ -28,6 +29,8 @@ class SNAKE:
         self.body_tl = pygame.image.load('Graphics/body_left_up.png').convert_alpha()
         self.body_br = pygame.image.load('Graphics/body_right_down.png').convert_alpha()
         self.body_bl = pygame.image.load('Graphics/body_left_down.png').convert_alpha()
+        
+        self.crunch_sound = pygame.mixer.Sound('Sound/crunch.wav')
 
     def draw_snake(self):
         # updates head and body parts so the blocks have the right sprites
@@ -87,7 +90,6 @@ class SNAKE:
             body_copy.insert(0,body_copy[0] + self.direction)
             self.body = body_copy[:]
             self.new_block = False
-        
         else:
             #moves the snake forward in the direction 
             body_copy = self.body[:-1]
@@ -97,6 +99,9 @@ class SNAKE:
     def add_block(self):
         #sets new_block to true after collision
         self.new_block = True
+
+    def play_crunch_sound(self):
+        self.crunch_sound.play()
 
 class FRUIT:
     def __init__(self):
@@ -150,6 +155,7 @@ class MAIN:
         if self.fruit.pos == self.snake.body[0]:
         # randomizes the fruit again, adds a block and adds a point to the score counter
             self.fruit.randomize()
+            self.snake.play_crunch_sound()
             # different collisions with the fruits
             if self.fruit.fruit_sprite == apple:
                 self.snake.add_block()
