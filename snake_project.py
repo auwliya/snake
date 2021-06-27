@@ -10,7 +10,7 @@ mainClock = pygame.time.Clock()
 pygame.display.set_caption('snake')
 screen = pygame.display.set_mode((500, 500),0,32)
 
-#Three different sizes of fonts
+#four different sizes of fonts
 font_title = pygame.font.Font('Font/ARCADECLASSIC.ttf',35)
 font = pygame.font.Font('Font/ARCADECLASSIC.ttf',25)
 font_small = pygame.font.Font('Font/ARCADECLASSIC.ttf',15)
@@ -26,6 +26,7 @@ def draw_text(text, font, color, surface, x, y):
 play_button = pygame.image.load('Graphics/play_button.png').convert_alpha()
 HTP_button = pygame.image.load('Graphics/HTP.png').convert_alpha()
 WASD_button = pygame.image.load('Graphics/WASDexpl.png').convert_alpha()
+game_over_screen_image = pygame.image.load('Graphics/game_over_screen.png').convert_alpha()
 
 #easter egg that gives you a 1% chance the sky is a different color
 if random.randint(0,100) >= 1:
@@ -283,7 +284,7 @@ def game():
                 elif self.apples_consumed == 0:
                     print(f"You didn't eat any apples!\n")
 
-                main_menu()
+                game_over_screen()
             
             def draw_score(self):
                 score_surface = game_font.render(str(self.score),True,(56,74,12))
@@ -357,17 +358,16 @@ def game():
             clock.tick(60)
 
 def How_to_play():
-    running = True
-    while running:
+    while True:
         screen.fill((175,215,70))
         draw_text('How  to  play', font_title, (56,74,12), screen, 20, 20)
         draw_text('You  can  move  the  snake  around', font, (56,74,12), screen, 20, 50)
         draw_text('Using  the  arrow  keys  or  WASD', font, (56,74,12), screen, 20, 65)
         draw_text('Eat the apples and lemons to grow', font, (56,74,12), screen, 20, 95)
         draw_text('Apples are 1 point and lemons 2', font, (56,74,12), screen, 20, 125)
-        draw_text('If you crash into a wall or  yourself', font, (56,74,12), screen, 20, 155)
+        draw_text('If  you  crash  into   a  wall or  yourself', font, (56,74,12), screen, 20, 155)
         draw_text('You lose the game', font, (56,74,12), screen, 20, 170)
-        draw_text('You can use esc to go back', font, (56,74,12), screen, 20, 200)
+        draw_text('You can use  esc  to  go  back', font, (56,74,12), screen, 20, 200)
 
         explanation = pygame.Rect(20, 225, 200, 200)
         screen.blit(WASD_button,explanation)
@@ -378,9 +378,43 @@ def How_to_play():
                 sys.exit()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
-                    running = False
+                    main_menu()
 
         pygame.display.update()
         mainClock.tick(60)
 
+def game_over_screen():
+    click = False
+    while True:
+        screen = pygame.display.set_mode((500, 500),0,32)
+        screen.fill((175,215,70))
+        mx, my = pygame.mouse.get_pos()
+        
+        button_3 = pygame.Rect(200, 250, 100, 50) 
+        button_4 = pygame.Rect(150, 310, 200, 50)
+        
+        game_over_screen_rect = pygame.Rect(0, 0, 500, 500)
+        screen.blit(game_over_screen_image,game_over_screen_rect)
+
+        pygame.display.update()
+        mainClock.tick(60)
+
+        if button_3.collidepoint((mx, my)):
+            if click:
+                game()
+            
+        elif button_4.collidepoint((mx, my)):
+            if click:
+                main_menu()
+        
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    main_menu()
+            if event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:
+                    click = True
 main_menu()
