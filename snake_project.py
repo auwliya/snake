@@ -26,7 +26,12 @@ def draw_text(text, font, color, surface, x, y):
 play_button = pygame.image.load('Graphics/play_button.png').convert_alpha()
 HTP_button = pygame.image.load('Graphics/HTP.png').convert_alpha()
 WASD_button = pygame.image.load('Graphics/WASDexpl.png').convert_alpha()
-Home_screen = pygame.image.load('Graphics/home.png').convert_alpha()
+
+#easter egg that gives you a 1% chance the sky is a different color
+if random.randint(0,100) >= 1:
+    Home_screen = pygame.image.load('Graphics/home.png').convert_alpha()
+else:
+    Home_screen = pygame.image.load('Graphics/home-easter-egg.png').convert_alpha()
 
 def main_menu():
     click = False
@@ -71,8 +76,7 @@ def main_menu():
                     click = True
 
 def game():
-    running = True
-    while running:
+    while True:
         class SNAKE:
             def __init__(self):
                 # Vectors the snake starts out with (three blocks long, always in the same coördinates)
