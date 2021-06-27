@@ -5,17 +5,20 @@ pygame.init()
 mainClock = pygame.time.Clock()
 pygame.display.set_caption('snake')
 screen = pygame.display.set_mode((500, 500),0,32)
- 
+
+#Three different sizes of fonts
 font_title = pygame.font.Font('Font/ARCADECLASSIC.ttf',35)
 font = pygame.font.Font('Font/ARCADECLASSIC.ttf',25)
 font_small = pygame.font.Font('Font/ARCADECLASSIC.ttf',15)
- 
+
+#Allows me to draw text
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
- 
+
+#Graphics for the menu screen 
 play_button = pygame.image.load('Graphics/play_button.png').convert_alpha()
 HTP_button = pygame.image.load('Graphics/HTP.png').convert_alpha()
 WASD_button = pygame.image.load('Graphics/WASDexpl.png').convert_alpha()
@@ -25,6 +28,7 @@ click = False
 def main_menu():
     while True:
         screen.fill((175,215,70))
+        #Draws the text in the menu, has the buttons, and blits the button design onto it
         draw_text('main menu', font_title, (56,74,12), screen, 20, 20)
         draw_text('Snake  made  by  Auwliya', font_small, (56,74,12), screen, 10, 480)
         mx, my = pygame.mouse.get_pos()
@@ -36,9 +40,8 @@ def main_menu():
         
         if button_1.collidepoint((mx, my)):
             if click:
-                os.system('cmd /k start snake-project.py')
-                pygame.quit
-                sys.exit
+                os.system('cmd /k "snake_project.py" ')
+                main_menu()
         
         elif button_2.collidepoint((mx, my)):
             if click:
