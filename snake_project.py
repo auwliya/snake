@@ -29,6 +29,7 @@ WASD_button = pygame.image.load('Graphics/WASDexpl.png').convert_alpha()
 Home_screen = pygame.image.load('Graphics/home.png').convert_alpha()
 
 def main_menu():
+    click = False
     while True:
         screen = pygame.display.set_mode((500, 500),0,32)
         screen.fill((175,215,70))
@@ -57,7 +58,6 @@ def main_menu():
             if click:
                 How_to_play()
  
-        click = False
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
