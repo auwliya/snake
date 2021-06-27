@@ -41,8 +41,6 @@ def main_menu():
         screen.fill((175,215,70))
         #Draws the text in the menu, has the buttons, and blits the button design onto it
         #The buttons have individual blits so that if the menu fails, the buttons remain
-        draw_text('main menu', font_title, (56,74,12), screen, 20, 20)
-        draw_text('Snake  made  by  Auwliya', font_small, (56,74,12), screen, 10, 480)
         mx, my = pygame.mouse.get_pos()
         button_1 = pygame.Rect(200, 250, 100, 50)
         screen.blit(play_button, button_1)
@@ -284,7 +282,7 @@ def game():
                 elif self.apples_consumed == 0:
                     print(f"You didn't eat any apples!\n")
 
-                game_over_screen()
+                game_over_screen(self.score)
             
             def draw_score(self):
                 score_surface = game_font.render(str(self.score),True,(56,74,12))
@@ -383,7 +381,7 @@ def How_to_play():
         pygame.display.update()
         mainClock.tick(60)
 
-def game_over_screen():
+def game_over_screen(score):
     click = False
     while True:
         screen = pygame.display.set_mode((500, 500),0,32)
@@ -395,6 +393,10 @@ def game_over_screen():
         
         game_over_screen_rect = pygame.Rect(0, 0, 500, 500)
         screen.blit(game_over_screen_image,game_over_screen_rect)
+
+        score_game_over_surface = font_title.render(str(score),True,(0,0,0))
+        score_rect = score_game_over_surface.get_rect(center = (420,213))
+        screen.blit(score_game_over_surface,score_rect)
 
         pygame.display.update()
         mainClock.tick(60)
