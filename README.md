@@ -1,10 +1,11 @@
 # Snake
+This is a PyGame project of Snake. This Project was made by Auwliya / Lemon1 
 
-This is a PyGame project of Snake. You need pygame installed to play this.
-This Project was made by Auwliya Popal / Lemon1 
+## How To Play
+To install this, you'll need to have the following installed:
+- Python 3 (from [python.org](https://www.python.org/downloads/))
+- Pygame (installed with ```pip install pygame```)
 
-To run the game everything needs to be in the same folder.
-Run snake_project.py to start the game, you will go to a menu screen.
+Then, run snake_project.py to start the game. Just hit Play! Do make sure all the files/folders are in one folder.
 
 There are comments in the code explaining other uses and info.
-The game is playable, but I am still adding things (the menu screen doesn't work that well right now)
