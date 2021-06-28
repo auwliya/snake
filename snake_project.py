@@ -16,17 +16,8 @@ font_title = pygame.font.Font('Font/ARCADECLASSIC.ttf',35)
 font = pygame.font.Font('Font/ARCADECLASSIC.ttf',25)
 font_small = pygame.font.Font('Font/ARCADECLASSIC.ttf',15)
 
-# Allows me to draw text
-def draw_text(text, font, color, surface, x, y):
-    textobj = font.render(text, 1, color)
-    textrect = textobj.get_rect()
-    textrect.topleft = (x, y)
-    surface.blit(textobj, textrect)
-
-# Graphics for the menu screen 
-play_button = pygame.image.load('Graphics/play_button.png').convert_alpha()
-HTP_button = pygame.image.load('Graphics/HTP.png').convert_alpha()
-WASD_button = pygame.image.load('Graphics/WASDexpl.png').convert_alpha()
+# Graphics for the different screens
+howtoplayscreen = pygame.image.load('Graphics/howtoplay.png').convert_alpha()
 game_over_screen_image = pygame.image.load('Graphics/game_over_screen.png').convert_alpha()
 you_won_screen = pygame.image.load('Graphics/youwon.png').convert_alpha()
 
@@ -45,11 +36,9 @@ def main_menu():
         # The buttons have individual blits, it helps me to check functionality of the buttons
         mx, my = pygame.mouse.get_pos()
         button_1 = pygame.Rect(200, 250, 100, 50)
-        screen.blit(play_button, button_1)
         
         button_2 = pygame.Rect(150, 310, 200, 50)
-        screen.blit(HTP_button, button_2)
-
+        
         homescreen_rect = pygame.Rect(0, 0, 500, 500)
         screen.blit(Home_screen,homescreen_rect)
         
@@ -217,7 +206,6 @@ def game():
                 self.score = 0
                 self.lemons_consumed = 0
                 self.apples_consumed = 0
-                total_consumed_fruits = self.apples_consumed + self.lemons_consumed
             
             def update(self):
                 self.snake.move_snake()
@@ -240,7 +228,7 @@ def game():
                         self.snake.add_block()
                         self.score += 1
                         self.apples_consumed += 1
-                    else:
+                    elif self.fruit.fruit_sprite == lemon:
                         self.snake.add_block()
                         self.snake.add_block()
                         self.score += 2
@@ -281,7 +269,7 @@ def game():
                 # exits game and prints your score in powershell
                 # extra info that doesn't show up in the game if you want to check how many you ate
                 print(f"\nYour score was {self.score}!\n")
-                if self.lemons_consumed >= 0:
+                if self.lemons_consumed >= 1:
                     print(f"You consumed {self.lemons_consumed} lemon(s)!")
                 elif self.lemons_consumed == 0:
                     print(f"You didn't eat any lemons!")
@@ -371,18 +359,10 @@ def game():
 def How_to_play():
     while True:
         screen.fill((175,215,70))
-        # draw_text is only used in the how_to_play section, i am probably getting rid of it later because using .blit with pixelart looks better
-        draw_text('How  to  play', font_title, (56,74,12), screen, 20, 20)
-        draw_text('You  can  move  the  snake  around', font, (56,74,12), screen, 20, 50)
-        draw_text('Using  the  arrow  keys  or  WASD', font, (56,74,12), screen, 20, 65)
-        draw_text('Eat the apples and lemons to grow', font, (56,74,12), screen, 20, 95)
-        draw_text('Apples are 1 point and lemons 2', font, (56,74,12), screen, 20, 125)
-        draw_text('If  you  crash  into   a  wall or  yourself', font, (56,74,12), screen, 20, 155)
-        draw_text('You lose the game', font, (56,74,12), screen, 20, 170)
-        draw_text('You can use  esc  to  go  back', font, (56,74,12), screen, 20, 200)
+        # uses .blit to make the how to play screen look cool
 
-        explanation = pygame.Rect(20, 225, 200, 200)
-        screen.blit(WASD_button,explanation)
+        explanation_screen = pygame.Rect(0, 0, 500, 500)
+        screen.blit(howtoplayscreen,explanation_screen)
 
         for event in pygame.event.get():
             if event.type == QUIT:
