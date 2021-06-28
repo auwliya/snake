@@ -4,31 +4,33 @@ from pygame.math import Vector2
 
 # Snake created by Auwliya123 / Lemon1
 # All pixel art is created by me
+# Special thanks to itscountvertigo for helping with some stuff
 
 pygame.init()
 mainClock = pygame.time.Clock()
 pygame.display.set_caption('snake')
 screen = pygame.display.set_mode((500, 500),0,32)
 
-#four different sizes of fonts
+# four different sizes of fonts
 font_title = pygame.font.Font('Font/ARCADECLASSIC.ttf',35)
 font = pygame.font.Font('Font/ARCADECLASSIC.ttf',25)
 font_small = pygame.font.Font('Font/ARCADECLASSIC.ttf',15)
 
-#Allows me to draw text
+# Allows me to draw text
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, 1, color)
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 
-#Graphics for the menu screen 
+# Graphics for the menu screen 
 play_button = pygame.image.load('Graphics/play_button.png').convert_alpha()
 HTP_button = pygame.image.load('Graphics/HTP.png').convert_alpha()
 WASD_button = pygame.image.load('Graphics/WASDexpl.png').convert_alpha()
 game_over_screen_image = pygame.image.load('Graphics/game_over_screen.png').convert_alpha()
+you_won_screen = pygame.image.load('Graphics/youwon.png').convert_alpha()
 
-#easter egg that gives you a 1% chance the sky is a different color
+# easter egg that gives you a 1% chance the sky is a different color
 if random.randint(0,100) >= 1:
     Home_screen = pygame.image.load('Graphics/home.png').convert_alpha()
 else:
@@ -39,8 +41,8 @@ def main_menu():
     while True:
         screen = pygame.display.set_mode((500, 500),0,32)
         screen.fill((175,215,70))
-        #Draws the text in the menu, has the buttons, and blits the button design onto it
-        #The buttons have individual blits so that if the menu fails, the buttons remain
+        # Has the buttons, and blits the button design onto it
+        # The buttons have individual blits, it helps me to check functionality of the buttons
         mx, my = pygame.mouse.get_pos()
         button_1 = pygame.Rect(200, 250, 100, 50)
         screen.blit(play_button, button_1)
@@ -53,15 +55,19 @@ def main_menu():
         
         pygame.display.update()
         mainClock.tick(60)
-
+        
+        # starts the game or  goes to How to play when pointer and the button are hovering over each other
+        # the print hover shows that the mouse is currently capable of using the button (a tool to explain collidepoint)
         if button_1.collidepoint((mx, my)):
+            #print('hover')
             if click:
                 game()
         
         elif button_2.collidepoint((mx, my)):
             if click:
                 How_to_play()
- 
+
+        # pygame and quit events, sets click to true making the buttons work
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -163,15 +169,16 @@ def game():
                     self.body = body_copy[:]
                     self.new_block = False
                 else:
-                    #moves the snake forward in the direction 
+                    # moves the snake forward in the direction 
                     body_copy = self.body[:-1]
                     body_copy.insert(0,body_copy[0] + self.direction)
                     self.body = body_copy[:]
 
             def add_block(self):
-                #sets new_block to true after collision
+                # sets new_block to true after collision
                 self.new_block = True
 
+            # cronch
             def play_crunch_sound(self):
                 self.crunch_sound.play()
 
@@ -195,7 +202,7 @@ def game():
                 self.x = random.randint(0,cell_number - 1)
                 self.y = random.randint(0,cell_number - 1)
                 self.pos = Vector2(self.x,self.y)
-                #if the random number is 1 or 2 its an apple, if its a 0 its a lemon.
+                # if the random number is 1 or 2 its an apple, if its a 0 its a lemon.
                 if random.randint(0,2) >= 1:
                     self.fruit_sprite = apple
                 else:
@@ -255,7 +262,8 @@ def game():
                 # epic fail
 
             def draw_grass(self):
-                # only draws every other block using division
+                # only draws every other block using division\
+                # row = rows, col = columns
                 grass_color = (167,209,61)
                 for row in range(cell_number):
                     if row % 2 == 0:
@@ -271,6 +279,7 @@ def game():
 
             def game_over(self):
                 # exits game and prints your score in powershell
+                # extra info that doesn't show up in the game if you want to check how many you ate
                 print(f"\nYour score was {self.score}!\n")
                 if self.lemons_consumed >= 0:
                     print(f"You consumed {self.lemons_consumed} lemon(s)!")
@@ -281,10 +290,12 @@ def game():
                     print(f"you consumed {self.apples_consumed} apple(s)!\n")
                 elif self.apples_consumed == 0:
                     print(f"You didn't eat any apples!\n")
-
+                
+                # (self.score) brings the score over to the def game_over_screen
                 game_over_screen(self.score)
             
             def draw_score(self):
+                # draws the score in the corner of the screen
                 score_surface = game_font.render(str(self.score),True,(56,74,12))
                 score_x = int(cell_size * cell_number - 60)
                 score_y = int(cell_size * cell_number - 60)
@@ -297,9 +308,11 @@ def game():
         screen = pygame.display.set_mode((cell_number * cell_size,cell_number * cell_size))
         clock = pygame.time.Clock() 
 
+        # apple and lemon graphics
         apple = pygame.image.load('Graphics/apple.png').convert_alpha() 
         lemon = pygame.image.load('Graphics/lemon.png').convert_alpha() 
 
+        # game_font can be replaced with font, but it works right now so im not changing the code haha
         main_game = MAIN()
         game_font = pygame.font.Font('Font/ARCADECLASSIC.ttf',25)
 
@@ -308,7 +321,7 @@ def game():
 
         while True:
             # draw elements
-            # snake cant go left when moving right and vice versa
+            # snake cant go left when moving right etc.
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
@@ -358,6 +371,7 @@ def game():
 def How_to_play():
     while True:
         screen.fill((175,215,70))
+        # draw_text is only used in the how_to_play section, i am probably getting rid of it later because using .blit with pixelart looks better
         draw_text('How  to  play', font_title, (56,74,12), screen, 20, 20)
         draw_text('You  can  move  the  snake  around', font, (56,74,12), screen, 20, 50)
         draw_text('Using  the  arrow  keys  or  WASD', font, (56,74,12), screen, 20, 65)
@@ -391,9 +405,13 @@ def game_over_screen(score):
         button_3 = pygame.Rect(200, 250, 100, 50) 
         button_4 = pygame.Rect(150, 310, 200, 50)
         
+        # the names are long because its almost identical to the other score during the game
         game_over_screen_rect = pygame.Rect(0, 0, 500, 500)
-        screen.blit(game_over_screen_image,game_over_screen_rect)
-
+        if score <= 399:
+            screen.blit(game_over_screen_image,game_over_screen_rect)
+        else:
+            screen.blit(you_won_screen,game_over_screen_rect)
+        
         score_game_over_surface = font_title.render(str(score),True,(0,0,0))
         score_rect = score_game_over_surface.get_rect(center = (420,213))
         screen.blit(score_game_over_surface,score_rect)
@@ -419,4 +437,6 @@ def game_over_screen(score):
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
+
+#starts the menu when running the game
 main_menu()
