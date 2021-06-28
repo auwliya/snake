@@ -407,7 +407,7 @@ def game_over_screen(score):
         
         # the names are long because its almost identical to the other score during the game
         game_over_screen_rect = pygame.Rect(0, 0, 500, 500)
-        if score <= 399:
+        if score <= 396:
             screen.blit(game_over_screen_image,game_over_screen_rect)
         else:
             screen.blit(you_won_screen,game_over_screen_rect)
