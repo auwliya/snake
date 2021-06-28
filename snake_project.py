@@ -221,7 +221,6 @@ def game():
             def check_collision(self):
                 if self.fruit.pos == self.snake.body[0]:
                 # randomizes the fruit again, adds a block and adds a point to the score counter
-                    self.fruit.randomize()
                     self.snake.play_crunch_sound()
                     # different collisions with the fruits
                     if self.fruit.fruit_sprite == apple:
@@ -233,6 +232,7 @@ def game():
                         self.snake.add_block()
                         self.score += 2
                         self.lemons_consumed += 1
+                    self.fruit.randomize()
 
                 for block in self.snake.body[1:]:
                     # makes sure that the fruit cannot spawn below or on the snake
