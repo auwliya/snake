@@ -21,6 +21,11 @@ howtoplayscreen = pygame.image.load('Graphics/howtoplay.png').convert_alpha()
 game_over_screen_image = pygame.image.load('Graphics/game_over_screen.png').convert_alpha()
 you_won_screen = pygame.image.load('Graphics/youwon.png').convert_alpha()
 
+# apple and lemon graphics
+apple = pygame.image.load('Graphics/apple.png').convert_alpha() 
+lemon = pygame.image.load('Graphics/lemon.png').convert_alpha() 
+orange = pygame.image.load('Graphics/Orang.png').convert_alpha() 
+
 # easter egg that gives you a 1% chance the sky is a different color
 if random.randint(0,100) >= 1:
     Home_screen = pygame.image.load('Graphics/home.png').convert_alpha()
@@ -195,12 +200,12 @@ def game():
                 
                 random_number_fruit = random.randint(0,10)
                 
-                #lemon 30% chance, apple 60% chance, orange 10% chance
+                #lemon 30% chance, apple 60% chance, orange 20% chance
                 if random_number_fruit <= 3:
                     self.fruit_sprite = lemon
-                elif random_number_fruit >= 4 and random_number_fruit <= 9:
+                elif random_number_fruit >= 4 and random_number_fruit <= 7:
                     self.fruit_sprite = apple
-                elif random_number_fruit == 10:
+                elif random_number_fruit >= 8:
                     self.fruit_sprite == orange
 
         class MAIN:
@@ -237,16 +242,16 @@ def game():
                         self.apples_consumed += 1
                     
                     elif self.fruit.fruit_sprite == lemon:
+                        #the extra length works when self.snake.move_snake() is behind it, but it can easily cause you to crash into a wall, so its not used right now
                         self.snake.add_block()
+                        #self.snake.move_snake()
                         self.snake.add_block()
+                        #self.snake.move_snake()
                         
                         self.score += 2
                         self.lemons_consumed += 1
                     
                     elif self.fruit.fruit_sprite == orange:
-                        self.snake.add_block()
-                        self.snake.add_block()
-                        self.snake.add_block()
                         self.snake.add_block()
                         
                         self.score += 4
