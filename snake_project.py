@@ -192,10 +192,16 @@ def game():
                 self.y = random.randint(0,cell_number - 1)
                 self.pos = Vector2(self.x,self.y)
                 # if the random number is 1 or 2 its an apple, if its a 0 its a lemon.
-                if random.randint(0,2) >= 1:
-                    self.fruit_sprite = apple
-                else:
+                
+                random_number_fruit = random.randint(0,10)
+                
+                #lemon 30% chance, apple 60% chance, orange 10% chance
+                if random_number_fruit <= 3:
                     self.fruit_sprite = lemon
+                elif random_number_fruit >= 4 and random_number_fruit <= 9:
+                    self.fruit_sprite = apple
+                elif random_number_fruit == 10:
+                    self.fruit_sprite == orange
 
         class MAIN:
             # contains all the other things like updates, drawings and checks so that it keeps getting repeated
@@ -206,6 +212,7 @@ def game():
                 self.score = 0
                 self.lemons_consumed = 0
                 self.apples_consumed = 0
+                self.oranges_consumed = 0
             
             def update(self):
                 self.snake.move_snake()
@@ -225,13 +232,26 @@ def game():
                     # different collisions with the fruits
                     if self.fruit.fruit_sprite == apple:
                         self.snake.add_block()
+                        
                         self.score += 1
                         self.apples_consumed += 1
+                    
                     elif self.fruit.fruit_sprite == lemon:
                         self.snake.add_block()
                         self.snake.add_block()
+                        
                         self.score += 2
                         self.lemons_consumed += 1
+                    
+                    elif self.fruit.fruit_sprite == orange:
+                        self.snake.add_block()
+                        self.snake.add_block()
+                        self.snake.add_block()
+                        self.snake.add_block()
+                        
+                        self.score += 4
+                        self.oranges_consumed += 1
+                    
                     self.fruit.randomize()
 
                 for block in self.snake.body[1:]:
@@ -275,10 +295,15 @@ def game():
                     print(f"You didn't eat any lemons!")
 
                 if self.apples_consumed >=1:
-                    print(f"you consumed {self.apples_consumed} apple(s)!\n")
+                    print(f"you consumed {self.apples_consumed} apple(s)!")
                 elif self.apples_consumed == 0:
-                    print(f"You didn't eat any apples!\n")
+                    print(f"You didn't eat any apples!")
                 
+                if self.oranges_consumed >=1:
+                    print(f"you consumed {self.oranges_consumed} orange(s)!\n")
+                elif self.oranges_consumed == 0:
+                    print(f"You didn't eat any oranges!\n")
+
                 # (self.score) brings the score over to the def game_over_screen
                 game_over_screen(self.score)
             
@@ -299,6 +324,7 @@ def game():
         # apple and lemon graphics
         apple = pygame.image.load('Graphics/apple.png').convert_alpha() 
         lemon = pygame.image.load('Graphics/lemon.png').convert_alpha() 
+        orange = pygame.image.load('Graphics/Orang.png').convert_alpha() 
 
         # game_font can be replaced with font, but it works right now so im not changing the code haha
         main_game = MAIN()
